@@ -14,4 +14,9 @@ class PurchaseOrderDetail extends Model
         'price',
         'total'
     ];
+
+    public function material(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Material::class, 'material_id');
+    }
 }

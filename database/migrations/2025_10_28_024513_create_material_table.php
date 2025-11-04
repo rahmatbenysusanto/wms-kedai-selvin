@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('category_id');
             $table->string('satuan')->nullable();
+            $table->decimal('min_stock', 8, 2)->default(0);
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });

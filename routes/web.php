@@ -19,6 +19,9 @@ Route::prefix('/warehouse')->controller(WarehouseController::class)->group(funct
 Route::prefix('/supplier')->controller(SupplierController::class)->group(function () {
     Route::get('/', 'index')->name('supplier.index');
     Route::post('/', 'store')->name('supplier.store');
+    Route::get('/find', 'find')->name('supplier.find');
+    Route::post('/update', 'update')->name('supplier.update');
+    Route::get('/delete', 'delete')->name('supplier.delete');
 });
 
 Route::prefix('/material')->controller(MaterialController::class)->group(function () {
@@ -33,6 +36,7 @@ Route::prefix('/purchase-order')->controller(PurchaseOrderController::class)->gr
     Route::get('/', 'index')->name('purchase_order.index');
     Route::get('/create', 'create')->name('purchase_order.create');
     Route::post('/', 'store')->name('purchase_order.store');
+    Route::get('/detail', 'detail')->name('purchase_order.detail');
 
     Route::get('/process', 'approvePurchaseOrder')->name('purchase_order.process');
     Route::get('/cancel', 'cancelPurchaseOrder')->name('purchase_order.cancel');

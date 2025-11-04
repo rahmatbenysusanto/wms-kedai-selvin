@@ -31,7 +31,6 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Address</th>
-                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -42,18 +41,11 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->address }}</td>
                                     <td>
-                                        @if($item->status == 'active')
-                                            <span class="badge bg-success">Active</span>
-                                        @else
-                                            <span class="badge bg-danger">Inactive</span>
-                                        @endif
-                                    </td>
-                                    <td>
                                         <div class="d-flex gap-2">
-                                            <a class="btn btn-info btn-sm">
+                                            <a class="btn btn-info btn-sm" onclick="editSupplier('{{ $item->id }}')">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a class="btn btn-danger btn-sm">
+                                            <a class="btn btn-danger btn-sm" onclick="deleteSupplier('{{ $item->id }}')">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         </div>
@@ -63,6 +55,34 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editSupplierModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="standard-modalLabel">Edit Supplier</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('supplier.update') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id" id="id">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="Supplier Name ..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" name="address" id="address" placeholder="Address ...">
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -94,4 +114,66 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        function editSupplier(id) {
+            $.ajax({
+                url: '{{ route('supplier.find') }}',
+                method: 'GET',
+                data: {
+                    id: id
+                },
+                success: (res) => {
+                    const data = res.data;
+
+                    document.getElementById('id').value = data.id;
+                    document.getElementById('name').value = data.name;
+                    document.getElementById('address').value = data.address;
+
+                    $('#editSupplierModal').modal('show');
+                }
+            })
+        }
+
+        function deleteSupplier(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: `Delete Supplier`,
+                icon: "warning",
+                showCancelButton: true,
+                customClass: {
+                    confirmButton: "btn btn-primary w-xs me-2 mt-2",
+                    cancelButton: "btn btn-danger w-xs mt-2"
+                },
+                confirmButtonText: "Yes, Delete it!",
+                buttonsStyling: false,
+                showCloseButton: true
+            }).then((i) => {
+                if (i.value) {
+
+                    $.ajax({
+                        url: '{{ route('supplier.delete') }}',
+                        method: 'GET',
+                        data: {
+                            id: id,
+                        },
+                        success: (res) => {
+                            if (res.status) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Success!",
+                                    text: `Delete Supplier Successfully!`,
+                                }).then((i) => {
+                                    window.location.reload();
+                                })
+                            }
+                        }
+                    });
+
+                }
+            });
+        }
+    </script>
 @endsection

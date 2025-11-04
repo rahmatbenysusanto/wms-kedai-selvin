@@ -55,14 +55,14 @@
                                     <td>{{ $item->created_at }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
-                                            <a class="btn btn-secondary btn-sm">
+                                            <a href="{{ route('purchase_order.detail', ['id' => $item->id]) }}" class="btn btn-secondary btn-sm">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                             @if($item->status == 'Pending')
-                                                <a class="btn btn-info btn-sm">
+                                                <a class="btn btn-info btn-sm" onclick="approvePO('{{ $item->id }}')">
                                                     <i class="fa feather-arrow-right"></i>
                                                 </a>
-                                                <a class="btn btn-danger btn-sm">
+                                                <a class="btn btn-danger btn-sm" onclick="cancelPO('{{ $item->id }}')">
                                                     <i class="fa fa-trash"></i>
                                                 </a>
                                             @endif
@@ -112,4 +112,86 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+    <script>
+        function approvePO(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: `Approve Purchase Order`,
+                icon: "warning",
+                showCancelButton: true,
+                customClass: {
+                    confirmButton: "btn btn-primary w-xs me-2 mt-2",
+                    cancelButton: "btn btn-danger w-xs mt-2"
+                },
+                confirmButtonText: "Yes, Approve!",
+                buttonsStyling: false,
+                showCloseButton: true
+            }).then((i) => {
+                if (i.value) {
+
+                    $.ajax({
+                        url: '{{ route('purchase_order.process') }}',
+                        method: 'GET',
+                        data: {
+                            id: id
+                        },
+                        success: (res) => {
+                            if (res.status) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Approve Purchase Order Success!',
+                                    icon: "success",
+                                }).then((i) => {
+                                    window.location.reload();
+                                });
+                            }
+                        }
+                    });
+
+                }
+            });
+        }
+
+        function cancelPO(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: `Cancel Purchase Order`,
+                icon: "warning",
+                showCancelButton: true,
+                customClass: {
+                    confirmButton: "btn btn-primary w-xs me-2 mt-2",
+                    cancelButton: "btn btn-danger w-xs mt-2"
+                },
+                confirmButtonText: "Yes, Cancel!",
+                buttonsStyling: false,
+                showCloseButton: true
+            }).then((i) => {
+                if (i.value) {
+
+                    $.ajax({
+                        url: '{{ route('purchase_order.cancel') }}',
+                        method: 'GET',
+                        data: {
+                            id: id
+                        },
+                        success: (res) => {
+                            if (res.status) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Cancel Purchase Order Success!',
+                                    icon: "success",
+                                }).then((i) => {
+                                    window.location.reload();
+                                });
+                            }
+                        }
+                    });
+
+                }
+            });
+        }
+    </script>
 @endsection

@@ -68,6 +68,15 @@ class PurchaseOrderController extends Controller
         }
     }
 
+    public function detail(Request $request): View
+    {
+        $purchaseOrder = PurchaseOrder::with('supplier')->where('id', $request->query('id'));
+        $purchaseOrderDetail = PurchaseOrderDetail::with('material', 'material.category')->where('purchase_order_id', $purchaseOrder->id)->get();
+
+        $title = 'Purchase Order';
+        return view('purchaseOrder.detail', compact('title', 'purchaseOrder', 'purchaseOrderDetail'));
+    }
+
     public function cancelPurchaseOrder(Request $request): \Illuminate\Http\JsonResponse
     {
         PurchaseOrder::where('id', $request->get('id'))->update([

@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="page-btn">
-            <a class="btn btn-primary">
+            <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createMaterialModal">
                 <i class="ti ti-circle-plus me-1"></i>
                 Create Material
             </a>
@@ -61,6 +61,62 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="createMaterialModal">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="page-title">
+                        <h4>Create Material</h4>
+                    </div>
+                    <button type="button" class="close bg-danger text-white fs-16" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('material.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">SKU</label>
+                                    <input type="text" class="form-control" name="sku" placeholder="SKU ...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-control" name="category">
+                                        <option value="">-- Choose Category --</option>
+                                        @foreach($category as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Satuan</label>
+                                    <input type="text" class="form-control" name="satuan">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" placeholder="Name ...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Min Stock</label>
+                                    <input type="number" class="form-control" name="minStock" placeholder="Min Stock ...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

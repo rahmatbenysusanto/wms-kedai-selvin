@@ -13,6 +13,7 @@ class Material extends Model
         'name',
         'category_id',
         'satuan',
+        'min_stock',
         'deleted_at'
     ];
 

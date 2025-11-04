@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Material;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class MaterialController extends Controller
@@ -12,18 +14,21 @@ class MaterialController extends Controller
     {
         $material = Material::with('category')->where('warehouse_id', 1)->whereNull('deleted_at')->paginate(10);
 
+        $category = Category::all();
+
         $title = 'Material';
-        return view('material.index', compact('title', 'material'));
+        return view('material.index', compact('title', 'material', 'category'));
     }
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
         Material::create([
             'warehouse_id'  => 1,
-            'sku'           => $request->post('sku'),
+            'sku'           => $request->post('sku') ?? 'MN-' . strtoupper(Str::random(6)),
             'name'          => $request->post('name'),
-            'category_id'   => $request->post('category_id'),
+            'category_id'   => $request->post('category'),
             'satuan'        => $request->post('satuan'),
+            'min_stock'     => $request->post('minStock'),
         ]);
 
         return redirect()->back()->with('success', 'Create Material Successfully');
