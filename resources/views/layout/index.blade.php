@@ -181,7 +181,7 @@
             <div id="sidebar-menu" class="sidebar-menu">
                 <ul>
                     <li class="submenu-open">
-                        <h6 class="submenu-hdr">Main</h6>
+                        <h6 class="submenu-hdr">Menu</h6>
                         <ul>
                             <li class="submenu-open">
                                 <ul>
@@ -195,7 +195,34 @@
                             </li>
 
                             <li class="submenu-open mt-2">
-                                <h6 class="submenu-hdr">Menu</h6>
+                                <h6 class="submenu-hdr">Main Module</h6>
+                                <ul>
+                                    <li class="{{ $title == 'Purchase Order' ? 'active' : '' }}">
+                                        <a href="{{ route('purchase_order.index') }}">
+                                            <i class="ti ti-list-details fs-16 me-2"></i>
+                                            <span>Purchase Order</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="{{ $title == 'Inventory' ? 'active' : '' }}">
+                                        <a href="{{ route('purchase_order.index') }}">
+                                            <i class="ti ti-list-details fs-16 me-2"></i>
+                                            <span>Inventory</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="{{ $title == 'Outbound' ? 'active' : '' }}">
+                                        <a href="{{ route('purchase_order.index') }}">
+                                            <i class="ti ti-list-details fs-16 me-2"></i>
+                                            <span>Outbound</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li class="submenu-open mt-2">
+                                <h6 class="submenu-hdr">Warehouse</h6>
                                 <ul>
                                     <li class="{{ $title == 'Warehouse' ? 'active' : '' }}">
                                         <a href="{{ route('warehouse.index') }}">
@@ -209,33 +236,14 @@
                                             <span>Supplier</span>
                                         </a>
                                     </li>
-                                    <li class="{{ in_array($title, ['Menu List', 'Create Menu']) ? 'active' : '' }}">
-                                        <a href="">
+                                    <li class="{{ in_array($title, ['Material']) ? 'active' : '' }}">
+                                        <a href="{{ route('material.index') }}">
                                             <i class="ti ti-book fs-16 me-2"></i>
-                                            <span>List Menu</span>
-                                        </a>
-                                    </li>
-                                    <li class="{{ $title == 'Menu Addon' ? 'active' : '' }}">
-                                        <a href="">
-                                            <i class="ti ti-checklist fs-16 me-2"></i>
-                                            <span>Add on</span>
-                                        </a>
-                                    </li>
-                                    <li class="{{ $title == 'Discount' ? 'active' : '' }}">
-                                        <a href="">
-                                            <i class="ti ti-discount-check fs-16 me-2"></i>
-                                            <span>Discount</span>
-                                        </a>
-                                    </li>
-                                    <li class="{{ $title == 'Recipe' ? 'active' : '' }}">
-                                        <a href="">
-                                            <i class="ti ti-book-2 fs-16 me-2"></i>
-                                            <span>Recipe</span>
+                                            <span>Material</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
-
                         </ul>
                     </li>
                 </ul>

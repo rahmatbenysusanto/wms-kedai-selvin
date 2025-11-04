@@ -10,8 +10,10 @@ class MaterialController extends Controller
 {
     public function index(): View
     {
+        $material = Material::with('category')->where('warehouse_id', 1)->whereNull('deleted_at')->paginate(10);
+
         $title = 'Material';
-        return view('material.index', compact('title'));
+        return view('material.index', compact('title', 'material'));
     }
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse

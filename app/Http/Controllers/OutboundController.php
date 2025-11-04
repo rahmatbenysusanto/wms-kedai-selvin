@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class InventoryController extends Controller
+class OutboundController extends Controller
 {
     public function index(): View
     {
-        $title = 'Inventory';
-        return view('inventory.index', compact('title'));
+        $title = 'Outbound';
+        return view('outbound.index', compact('title'));
     }
 }

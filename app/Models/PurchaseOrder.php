@@ -14,4 +14,9 @@ class PurchaseOrder extends Model
         'status',
         'qty'
     ];
+
+    public function supplier(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
 }

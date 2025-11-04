@@ -29,12 +29,17 @@ Route::prefix('/material')->controller(MaterialController::class)->group(functio
     Route::get('/delete', 'delete')->name('material.delete');
 });
 
-Route::prefix('/purchase_order')->controller(PurchaseOrderController::class)->group(function () {
+Route::prefix('/purchase-order')->controller(PurchaseOrderController::class)->group(function () {
+    Route::get('/', 'index')->name('purchase_order.index');
+    Route::get('/create', 'create')->name('purchase_order.create');
+    Route::post('/', 'store')->name('purchase_order.store');
 
+    Route::get('/process', 'approvePurchaseOrder')->name('purchase_order.process');
+    Route::get('/cancel', 'cancelPurchaseOrder')->name('purchase_order.cancel');
 });
 
 Route::prefix('/inventory')->controller(InventoryController::class)->group(function () {
-
+    Route::get('/', 'index')->name('inventory.index');
 });
 
 Route::prefix('/api')->group(function () {
