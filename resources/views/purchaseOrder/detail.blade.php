@@ -52,7 +52,7 @@
                                     <th>SKU</th>
                                     <th>Material</th>
                                     <th>Category</th>
-                                    <th>QTY</th>
+                                    <th class="text-center">QTY</th>
                                     <th>Price</th>
                                 </tr>
                             </thead>
@@ -62,9 +62,9 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->material->sku }}</td>
                                     <td>{{ $item->material->name }}</td>
-                                    <td>{{ $item->category->name }}</td>
-                                    <td>{{ $item->qty }}</td>
-                                    <td>{{ number_format($item->price) }}</td>
+                                    <td>{{ $item->material->category->name }}</td>
+                                    <td class="text-center fw-bold">{{ $item->qty }}</td>
+                                    <td class="fw-bold">Rp {{ number_format($item->price) }}</td>
                                 </tr>
                             @endforeach
                             </tbody>

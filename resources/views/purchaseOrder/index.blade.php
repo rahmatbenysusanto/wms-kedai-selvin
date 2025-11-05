@@ -60,7 +60,7 @@
                                             </a>
                                             @if($item->status == 'Pending')
                                                 <a class="btn btn-info btn-sm" onclick="approvePO('{{ $item->id }}')">
-                                                    <i class="fa feather-arrow-right"></i>
+                                                    <i class="fa fa-check"></i>
                                                 </a>
                                                 <a class="btn btn-danger btn-sm" onclick="cancelPO('{{ $item->id }}')">
                                                     <i class="fa fa-trash"></i>

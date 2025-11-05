@@ -205,7 +205,7 @@
                                     </li>
 
                                     <li class="{{ $title == 'Inventory' ? 'active' : '' }}">
-                                        <a href="{{ route('purchase_order.index') }}">
+                                        <a href="{{ route('inventory.index') }}">
                                             <i class="ti ti-list-details fs-16 me-2"></i>
                                             <span>Inventory</span>
                                         </a>

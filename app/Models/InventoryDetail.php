@@ -13,4 +13,14 @@ class InventoryDetail extends Model
         'qty',
         'price'
     ];
+
+    public function material(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Material::class, 'material_id');
+    }
+
+    public function purchaseOrderDetail(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(PurchaseOrderDetail::class, 'purchase_order_detail_id');
+    }
 }

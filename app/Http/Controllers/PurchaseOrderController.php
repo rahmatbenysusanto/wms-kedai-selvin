@@ -45,7 +45,7 @@ class PurchaseOrderController extends Controller
                 'status'        => 'Pending',
             ]);
 
-            foreach ($request->post('material') as $material) {
+            foreach ($request->post('material') ?? [] as $material) {
                 PurchaseOrderDetail::create([
                     'purchase_order_id' => $purchaseOrder->id,
                     'material_id'       => $material['id'],
@@ -57,20 +57,20 @@ class PurchaseOrderController extends Controller
 
             DB::commit();
             return response()->json([
-                'success' => true,
+                'status' => true,
             ]);
         } catch (\Exception $err) {
             DB::rollBack();
             Log::error($err->getMessage());
             return response()->json([
-                'success' => false,
+                'status' => false,
             ]);
         }
     }
 
     public function detail(Request $request): View
     {
-        $purchaseOrder = PurchaseOrder::with('supplier')->where('id', $request->query('id'));
+        $purchaseOrder = PurchaseOrder::with('supplier')->where('id', $request->query('id'))->first();
         $purchaseOrderDetail = PurchaseOrderDetail::with('material', 'material.category')->where('purchase_order_id', $purchaseOrder->id)->get();
 
         $title = 'Purchase Order';
@@ -84,7 +84,7 @@ class PurchaseOrderController extends Controller
         ]);
 
         return response()->json([
-            'success' => true,
+            'status' => true,
         ]);
     }
 
@@ -101,13 +101,22 @@ class PurchaseOrderController extends Controller
             $purchaseOrderDetail = PurchaseOrderDetail::where('purchase_order_id', $purchaseOrder->id)->get();
 
             foreach ($purchaseOrderDetail as $detail) {
-                Inventory::where('warehouse_id', $purchaseOrder->warehouse_id)
-                    ->where('material_id', $detail->material_id)
-                    ->increment('stock', $detail->qty);
-
                 $inventory = Inventory::where('warehouse_id', $purchaseOrder->warehouse_id)->where('material_id', $detail->material_id)->first();
+
+                if ($inventory == null) {
+                    $inventory = Inventory::create([
+                        'warehouse_id'  => 1,
+                        'material_id'   => $detail->material_id,
+                        'qty'           => $detail->qty,
+                    ]);
+
+                } else {
+                    Inventory::where('warehouse_id', $purchaseOrder->warehouse_id)->where('material_id', $detail->material_id)->increment('stock', $detail->qty);
+                }
+                $inventoryId = $inventory->id;
+
                 InventoryDetail::create([
-                    'inventory_id'              => $inventory->id,
+                    'inventory_id'              => $inventoryId,
                     'purchase_order_detail_id'  => $detail->id,
                     'qty'                       => $detail->qty,
                     'price'                     => $detail->price,
@@ -116,13 +125,14 @@ class PurchaseOrderController extends Controller
 
             DB::commit();
             return response()->json([
-                'success' => true,
+                'status' => true,
             ]);
         } catch (\Exception $err) {
             DB::rollBack();
             Log::error($err->getMessage());
+            Log::info($err->getLine());
             return response()->json([
-                'success' => false,
+                'status' => false,
             ]);
         }
     }

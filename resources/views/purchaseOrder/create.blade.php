@@ -45,7 +45,7 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0">Material Purchase Order</h4>
-                        <a class="btn btn-info btn-sm">Add Material</a>
+                        <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#addMaterialModal">Add Material</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -147,6 +147,7 @@
                         sku: data.sku,
                         name: data.name,
                         category: data.category.name,
+                        satuan: data.satuan,
                         qty: 1,
                         price: 0,
                         total: 0,
@@ -171,7 +172,7 @@
                         <td>${item.name}</td>
                         <td>${item.category}</td>
                         <td>
-                            <input type="number" class="form-control" value="${item.qty}" onchange="changeQTY(${index}, this.value)">
+                            <div class="d-flex align-items-center"><input type="number" class="form-control" value="${item.qty}" onchange="changeQTY(${index}, this.value)"> <span class="ms-2">${item.satuan}</span></div>
                         </td>
                         <td>
                             <input type="number" class="form-control" value="${item.price}" onchange="changePrice(${index}, this.value)">

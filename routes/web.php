@@ -44,6 +44,7 @@ Route::prefix('/purchase-order')->controller(PurchaseOrderController::class)->gr
 
 Route::prefix('/inventory')->controller(InventoryController::class)->group(function () {
     Route::get('/', 'index')->name('inventory.index');
+    Route::get('/detail', 'detail')->name('inventory.detail');
 });
 
 Route::prefix('/api')->group(function () {

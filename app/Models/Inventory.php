@@ -12,4 +12,9 @@ class Inventory extends Model
         'material_id',
         'stock'
     ];
+
+    public function material(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Material::class, 'material_id');
+    }
 }
