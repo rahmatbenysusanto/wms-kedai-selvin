@@ -212,7 +212,7 @@
                                     </li>
 
                                     <li class="{{ $title == 'Outbound' ? 'active' : '' }}">
-                                        <a href="{{ route('purchase_order.index') }}">
+                                        <a href="{{ route('outbound.index') }}">
                                             <i class="ti ti-list-details fs-16 me-2"></i>
                                             <span>Outbound</span>
                                         </a>

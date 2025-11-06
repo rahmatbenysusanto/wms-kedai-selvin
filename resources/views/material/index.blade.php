@@ -47,10 +47,10 @@
                                     <td>{{ $item->satuan }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
-                                            <a class="btn btn-secondary btn-sm">
+                                            <a class="btn btn-secondary btn-sm" onclick="editMaterial('{{ $item->id }}')">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a class="btn btn-danger btn-sm">
+                                            <a class="btn btn-danger btn-sm" onclick="deleteMaterial('{{ $item->id }}')">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         </div>
@@ -64,7 +64,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="createMaterialModal">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -120,4 +119,102 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="editMaterialModal">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="page-title">
+                        <h4>Edit Material</h4>
+                    </div>
+                    <button type="button" class="close bg-danger text-white fs-16" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('material.update') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">SKU</label>
+                                    <input type="text" class="form-control" name="sku" id="sku" placeholder="SKU ...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-control" name="category">
+                                        <option value="">-- Choose Category --</option>
+                                        @foreach($category as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Satuan</label>
+                                    <input type="text" class="form-control" name="satuan" id="satuan">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" id="name" placeholder="Name ...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Min Stock</label>
+                                    <input type="number" class="form-control" name="minStock" id="minStock" placeholder="Min Stock ...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('js')
+    <script>
+        function editMaterial(id) {
+            $.ajax({
+                url: '{{ route('material.find') }}',
+                method: 'GET',
+                data: {
+                    id: id
+                },
+                success: (res) => {
+                    const data = res.data;
+
+                    document.getElementById('sku').value = data.sku;
+                    document.getElementById('name').value = data.name;
+                    document.getElementById('satuan').value = data.satuan;
+                    document.getElementById('minStock').value = data.min_stock;
+
+                    $('#editMaterialModal').modal('show');
+                }
+            });
+        }
+
+        function deleteMaterial(id) {
+            $.ajax({
+                url: '{{ route('material.delete') }}',
+                method: 'GET',
+                data: {
+                    id: id
+                },
+                success: (res) => {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Material deleted successfully',
+                        icon: 'success',
+                    }).then((i) => {
+                        window.location.reload();
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\OutboundController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\SupplierController;
@@ -47,8 +48,19 @@ Route::prefix('/inventory')->controller(InventoryController::class)->group(funct
     Route::get('/detail', 'detail')->name('inventory.detail');
 });
 
+Route::prefix('/outbound')->controller(OutboundController::class)->group(function () {
+    Route::get('/', 'index')->name('outbound.index');
+    Route::get('/detail', 'detail')->name('outbound.detail');
+    Route::get('/process', 'process')->name('outbound.process');
+    Route::get('/cancel', 'cancel')->name('outbound.cancel');
+});
+
 Route::prefix('/api')->group(function () {
     Route::prefix('/warehouse')->controller(WarehouseController::class)->group(function () {
         Route::get('/', 'warehouse');
+    });
+
+    Route::prefix('/outbound')->controller(OutboundController::class)->group(function () {
+        Route::post('/', 'store')->name('outbound.store');
     });
 });
