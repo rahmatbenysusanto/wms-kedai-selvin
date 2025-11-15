@@ -54,13 +54,3 @@ Route::prefix('/outbound')->controller(OutboundController::class)->group(functio
     Route::get('/process', 'process')->name('outbound.process');
     Route::get('/cancel', 'cancel')->name('outbound.cancel');
 });
-
-Route::prefix('/api')->group(function () {
-    Route::prefix('/warehouse')->controller(WarehouseController::class)->group(function () {
-        Route::get('/', 'warehouse');
-    });
-
-    Route::prefix('/outbound')->controller(OutboundController::class)->group(function () {
-        Route::post('/', 'store')->name('outbound.store');
-    });
-});

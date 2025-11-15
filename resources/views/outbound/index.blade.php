@@ -52,12 +52,14 @@
                                             <a href="{{ route('outbound.detail', ['id' => $item->id]) }}" class="btn btn-info btn-sm">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a class="btn btn-secondary btn-sm" onclick="processOutbound('{{ $item->id }}')">
-                                                <i class="fa fe-arrow-right"></i>
-                                            </a>
-                                            <a class="btn btn-danger btn-sm" onclick="cancelOutbound('{{ $item->id }}')">
-                                                <i class="fa fa-delete-left"></i>
-                                            </a>
+                                            @if($item->status == 'Open')
+                                                <a class="btn btn-secondary btn-sm" onclick="processOutbound('{{ $item->id }}')">
+                                                    <i class="fa fa-right-left"></i>
+                                                </a>
+                                                <a class="btn btn-danger btn-sm" onclick="cancelOutbound('{{ $item->id }}')">
+                                                    <i class="fa fa-delete-left"></i>
+                                                </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

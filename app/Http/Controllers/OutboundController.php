@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inventory;
+use App\Models\Material;
 use App\Models\Outbound;
 use App\Models\OutboundDetail;
 use Illuminate\Http\Request;
@@ -73,13 +74,15 @@ class OutboundController extends Controller
                 'outlet'            => $request->post('outlet'),
                 'outlet_po_number'  => $request->post('outlet_po_number'),
                 'qty'               => $request->post('qty'),
-                'status'            => 'New'
+                'status'            => 'Open'
             ]);
 
             foreach ($request->post('material') as $material) {
+                $materialWMS = Material::where('sku', $material['sku'])->first();
+
                 OutboundDetail::create([
                     'outbound_id'   => $outbound->id,
-                    'material_id'   => $material['id'],
+                    'material_id'   => $materialWMS->id,
                     'qty'           => $material['qty'],
                     'satuan'        => $material['satuan'],
                 ]);
