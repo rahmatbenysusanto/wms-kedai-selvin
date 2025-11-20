@@ -186,8 +186,8 @@
                             <li class="submenu-open">
                                 <ul>
                                     <li class="{{ $title == 'Dashboard' ? 'active' : '' }}">
-                                        <a href="">
-                                            <i class="ti ti-layout-grid fs-16 me-2"></i>
+                                        <a href="{{ route('dashboard') }}">
+                                            <i class="ti ti-dashboard fs-16 me-2"></i>
                                             <span>Dashboard</span>
                                         </a>
                                     </li>
@@ -199,25 +199,24 @@
                                 <ul>
                                     <li class="{{ $title == 'Purchase Order' ? 'active' : '' }}">
                                         <a href="{{ route('purchase_order.index') }}">
-                                            <i class="ti ti-list-details fs-16 me-2"></i>
+                                            <i class="ti ti-file-invoice fs-16 me-2"></i>
                                             <span>Purchase Order</span>
                                         </a>
                                     </li>
 
                                     <li class="{{ $title == 'Inventory' ? 'active' : '' }}">
                                         <a href="{{ route('inventory.index') }}">
-                                            <i class="ti ti-list-details fs-16 me-2"></i>
+                                            <i class="ti ti-packages fs-16 me-2"></i>
                                             <span>Inventory</span>
                                         </a>
                                     </li>
 
                                     <li class="{{ $title == 'Outbound' ? 'active' : '' }}">
                                         <a href="{{ route('outbound.index') }}">
-                                            <i class="ti ti-list-details fs-16 me-2"></i>
+                                            <i class="ti ti-truck-delivery fs-16 me-2"></i>
                                             <span>Outbound</span>
                                         </a>
                                     </li>
-
                                 </ul>
                             </li>
 
@@ -226,19 +225,21 @@
                                 <ul>
                                     <li class="{{ $title == 'Warehouse' ? 'active' : '' }}">
                                         <a href="{{ route('warehouse.index') }}">
-                                            <i class="ti ti-list-details fs-16 me-2"></i>
+                                            <i class="ti ti-building-warehouse fs-16 me-2"></i>
                                             <span>Warehouse</span>
                                         </a>
                                     </li>
+
                                     <li class="{{ $title == 'Supplier' ? 'active' : '' }}">
                                         <a href="{{ route('supplier.index') }}">
-                                            <i class="ti ti-list-details fs-16 me-2"></i>
+                                            <i class="ti ti-users fs-16 me-2"></i>
                                             <span>Supplier</span>
                                         </a>
                                     </li>
+
                                     <li class="{{ in_array($title, ['Material']) ? 'active' : '' }}">
                                         <a href="{{ route('material.index') }}">
-                                            <i class="ti ti-book fs-16 me-2"></i>
+                                            <i class="ti ti-box fs-16 me-2"></i>
                                             <span>Material</span>
                                         </a>
                                     </li>
