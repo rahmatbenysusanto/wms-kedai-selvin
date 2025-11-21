@@ -15,7 +15,34 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-
+                    <form action="{{ url()->current() }}" method="GET">
+                        <div class="row">
+                            <div class="col-2">
+                                <label class="form-label">SKU</label>
+                                <input type="text" class="form-control" name="sku" value="{{ request()->get('sku') }}" placeholder="SKU ...">
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label">Material</label>
+                                <input type="text" class="form-control" name="material" value="{{ request()->get('material') }}" placeholder="Material ...">
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label">Category</label>
+                                <select class="form-control" name="category">
+                                    <option value="">-- Choose Category --</option>
+                                    @foreach($category as $item)
+                                        <option value="{{ $item->id }}" {{ $item->id == request()->get('category') ? 'selected' : '' }}>{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label text-white">-</label>
+                                <div class="d-flex">
+                                    <button type="submit" class="btn btn-info">Search</button>
+                                    <a href="{{ url()->current() }}" class="btn btn-danger ms-2">Clear</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

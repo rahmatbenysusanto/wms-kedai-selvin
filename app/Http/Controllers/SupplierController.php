@@ -8,9 +8,16 @@ use Illuminate\View\View;
 
 class SupplierController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $supplier = Supplier::whereNull('deleted_at')->paginate(10);
+        $supplier = Supplier::whereNull('deleted_at')
+            ->when($request->query('name'), function ($query) use ($request) {
+                return $query->where('name', 'like', '%' . $request->query('name') . '%');
+            })
+            ->paginate(10)
+            ->appends([
+                'name' => $request->query('name'),
+            ]);
 
         $title = 'Supplier';
         return view('supplier.index', compact('title', 'supplier'));

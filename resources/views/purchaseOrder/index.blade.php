@@ -20,7 +20,30 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-
+                    <form action="{{ url()->current() }}" method="GET">
+                        <div class="row">
+                            <div class="col-2">
+                                <label class="form-label">PO Number</label>
+                                <input type="text" class="form-control" name="poNumber" value="{{ request()->get('poNumber') }}" placeholder="PO Number ...">
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label">Supplier</label>
+                                <select class="form-control" name="supplier">
+                                    <option value="">-- Choose Supplier --</option>
+                                    @foreach($suppliers as $item)
+                                        <option value="{{ $item->id }}" {{ $item->id == request()->get('supplier') ? 'selected' : '' }}>{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label text-white">-</label>
+                                <div class="d-flex">
+                                    <button type="submit" class="btn btn-info">Search</button>
+                                    <a href="{{ url()->current() }}" class="btn btn-danger ms-2">Clear</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

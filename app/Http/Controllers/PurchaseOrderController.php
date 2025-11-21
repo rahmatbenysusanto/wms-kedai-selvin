@@ -15,12 +15,25 @@ use Illuminate\View\View;
 
 class PurchaseOrderController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $purchaseOrder = PurchaseOrder::where('warehouse_id', 1)->paginate(10);
+        $purchaseOrder = PurchaseOrder::where('warehouse_id', 1)
+            ->when($request->query('noPo'), function ($query) use ($request) {
+                return $query->where('number', 'like', '%' . $request->query('noPo') . '%');
+            })
+            ->when($request->query('supplier'), function ($query) use ($request) {
+                return $query->where('supplier_id', $request->query('supplier'));
+            })
+            ->paginate(10)
+            ->appends([
+                'noPo'      => $request->query('noPo'),
+                'supplier'  => $request->query('supplier'),
+            ]);
+
+        $suppliers = Supplier::all();
 
         $title = 'Purchase Order';
-        return view('purchaseOrder.index', compact('title', 'purchaseOrder'));
+        return view('purchaseOrder.index', compact('title', 'purchaseOrder', 'suppliers'));
     }
 
     public function create(): View

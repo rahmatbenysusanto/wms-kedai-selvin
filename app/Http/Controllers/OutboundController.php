@@ -6,15 +6,24 @@ use App\Models\Inventory;
 use App\Models\Material;
 use App\Models\Outbound;
 use App\Models\OutboundDetail;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class OutboundController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $outbound = Outbound::where('warehouse_id', 1)->paginate(10);
+        $outbound = Outbound::where('warehouse_id', 1)
+            ->when($request->query('number'), function ($query) use ($request) {
+                return $query->where('outlet_po_number', $request->query('number'));
+            })
+            ->paginate(10)
+            ->appends([
+                'number' => $request->query('number'),
+            ]);
 
         $title = 'Outbound';
         return view('outbound.index', compact('title', 'outbound'));
@@ -29,6 +38,9 @@ class OutboundController extends Controller
         return view('outbound.detail', compact('title', 'outbound', 'outboundDetail'));
     }
 
+    /**
+     * @throws ConnectionException
+     */
     public function process(Request $request): \Illuminate\Http\JsonResponse
     {
         Outbound::where('id', $request->query('id'))->update([
@@ -44,7 +56,10 @@ class OutboundController extends Controller
         }
 
         // Trigger ke POS
-
+        Http::baseUrl(env('URL_POS'))
+            ->post('/process-po', [
+                'po_number' => $outbound->outlet_po_number,
+            ]);
 
         return response()->json([
             'status' => true
