@@ -58,8 +58,9 @@
                                     <th>Name</th>
                                     <th>Category</th>
                                     <th>QTY</th>
+                                    <th>Satuan</th>
                                     <th>Price</th>
-                                    <th>Total</th>
+                                    <th>Satuan Price</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -147,9 +148,11 @@
                         sku: data.sku,
                         name: data.name,
                         category: data.category.name,
-                        satuan: data.satuan,
+                        satuan: null,
+                        konversi: data.konversi,
                         qty: 1,
                         price: 0,
+                        satuanPrice: null,
                         total: 0,
                     });
 
@@ -165,6 +168,13 @@
             let html = '';
 
             material.forEach((item, index) => {
+                let satuanHtml = '<option value="">-- Choose Satuan --</option>';
+                let priceSatuanHtml = '<option value="">-- Choose Satuan --</option>';
+                (item.konversi).forEach((satuan) => {
+                    satuanHtml += `<option value="${satuan.id}" ${parseInt(item.satuan) === satuan.id ? 'selected' : ''}>${satuan.satuan}</option>`;
+                    priceSatuanHtml += `<option value="${satuan.id}" ${parseInt(item.satuanPrice) === satuan.id ? 'selected' : ''}>${satuan.satuan}</option>`;
+                });
+
                 html += `
                     <tr>
                         <td>${index + 1}</td>
@@ -172,18 +182,42 @@
                         <td>${item.name}</td>
                         <td>${item.category}</td>
                         <td>
-                            <div class="d-flex align-items-center"><input type="number" class="form-control" value="${item.qty}" onchange="changeQTY(${index}, this.value)"> <span class="ms-2">${item.satuan}</span></div>
+                            <input type="number" class="form-control" value="${item.qty}" onchange="changeQTY(${index}, this.value)">
                         </td>
+                        <td>
+                            <select class="form-control" onchange="changeSatuan(${index}, this.value)">
+                                ${satuanHtml}
+                            </select>
                         <td>
                             <input type="number" class="form-control" value="${item.price}" onchange="changePrice(${index}, this.value)">
                         </td>
-                        <td>${item.total}</td>
+                        <td>
+                            <select class="form-control" onchange="changeSatuanPrice(${index}, this.value)">
+                                ${priceSatuanHtml}
+                            </select>
+                        </td>
                         <td><a class="btn btn-danger btn-sm" onclick="deleteMaterial(${index})"><i class="fa fa-trash"></i></a></td>
                     </tr>
                 `;
             });
 
             document.getElementById('listMaterial').innerHTML = html;
+        }
+
+        function changeSatuan(index, value) {
+            const material = JSON.parse(localStorage.getItem('material')) ?? [];
+
+            material[index].satuan = parseInt(value);
+
+            localStorage.setItem('material', JSON.stringify(material));
+        }
+
+        function changeSatuanPrice(index, value) {
+            const material = JSON.parse(localStorage.getItem('material')) ?? [];
+
+            material[index].satuanPrice = parseInt(value);
+
+            localStorage.setItem('material', JSON.stringify(material));
         }
 
         function changeQTY(index, value) {

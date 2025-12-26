@@ -12,7 +12,7 @@ class InventoryController extends Controller
 {
     public function index(Request $request): View
     {
-        $inventory = Inventory::with('material', 'material.category')
+        $inventory = Inventory::with('material', 'material.category', 'material.konversi')
             ->where('warehouse_id', 1)
             ->whereHas('material', function ($query) use ($request) {
                 if ($request->query('sku')) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventory;
 use App\Models\InventoryDetail;
+use App\Models\KonversiQty;
 use App\Models\Material;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderDetail;
@@ -59,11 +60,25 @@ class PurchaseOrderController extends Controller
             ]);
 
             foreach ($request->post('material') ?? [] as $material) {
+                $checkSatuan = KonversiQty::find($material['satuan']);
+                if ($checkSatuan->terkecil == 'Y') {
+                    $qtyKonversi = $material['qty'];
+                    $satuanKonversi  = $checkSatuan->id;
+                } else {
+                    $konversiQty = KonversiQty::where('konversi_key', $checkSatuan->konversi_key)->where('terkecil', 'Y')->first();
+                    $qtyKonversi = $material['qty'] * $checkSatuan->konversi;
+                    $satuanKonversi  = $konversiQty->id;
+                }
+
                 PurchaseOrderDetail::create([
                     'purchase_order_id' => $purchaseOrder->id,
                     'material_id'       => $material['id'],
-                    'qty'               => $material['qty'],
+                    'qty'               => $qtyKonversi,
+                    'satuan_id'         => $satuanKonversi,
                     'price'             => $material['price'],
+                    'price_satuan_id'   => $material['satuanPrice'],
+                    'reff_qty'          => $material['qty'],
+                    'reff_satuan_id'    => $material['satuan'],
                     'total'             => $material['qty'] * $material['price'],
                 ]);
             }
@@ -84,7 +99,7 @@ class PurchaseOrderController extends Controller
     public function detail(Request $request): View
     {
         $purchaseOrder = PurchaseOrder::with('supplier')->where('id', $request->query('id'))->first();
-        $purchaseOrderDetail = PurchaseOrderDetail::with('material', 'material.category')->where('purchase_order_id', $purchaseOrder->id)->get();
+        $purchaseOrderDetail = PurchaseOrderDetail::with('material', 'material.category', 'konversiQty', 'reffKonversiQty')->where('purchase_order_id', $purchaseOrder->id)->get();
 
         $title = 'Purchase Order';
         return view('purchaseOrder.detail', compact('title', 'purchaseOrder', 'purchaseOrderDetail'));
@@ -120,7 +135,7 @@ class PurchaseOrderController extends Controller
                     $inventory = Inventory::create([
                         'warehouse_id'  => 1,
                         'material_id'   => $detail->material_id,
-                        'qty'           => $detail->qty,
+                        'stock'         => $detail->qty,
                     ]);
 
                 } else {

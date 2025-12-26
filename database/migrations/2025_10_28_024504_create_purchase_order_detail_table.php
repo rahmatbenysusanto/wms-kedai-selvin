@@ -16,7 +16,11 @@ return new class extends Migration
             $table->integer('purchase_order_id');
             $table->integer('material_id');
             $table->integer('qty');
+            $table->integer('satuan_id');
+            $table->integer('reff_qty');
+            $table->integer('reff_satuan_id');
             $table->decimal('price', 9, 2)->default(0);
+            $table->integer('price_satuan_id');
             $table->decimal('total', 9, 2)->default(0);
             $table->timestamps();
         });

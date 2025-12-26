@@ -55,6 +55,7 @@
                                     <th>Category</th>
                                     <th class="text-center">Min Stock</th>
                                     <th class="text-center">Stock</th>
+                                    <th class="text-center">Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -65,8 +66,15 @@
                                     <td>{{ $item->material->sku }}</td>
                                     <td>{{ $item->material->name }}</td>
                                     <td>{{ $item->material->category->name }}</td>
-                                    <td class="text-center fw-bold">{{ number_format($item->material->min_stock) }} {{ $item->material->satuan }}</td>
-                                    <td class="text-center fw-bold">{{ number_format($item->stock * 1000) }} {{ $item->material->satuan }}</td>
+                                    <td class="text-center fw-bold">{{ number_format($item->material->min_stock) }} {{ $item->material->konversi->satuan }}</td>
+                                    <td class="text-center fw-bold">{{ number_format($item->stock) }} {{ $item->material->konversi->satuan }}</td>
+                                    <td class="text-center">
+                                        @if($item->material->min_stock > ($item->stock))
+                                            <span class="badge bg-danger">Stock Minimum</span>
+                                        @else
+                                            <span class="badge bg-success">Stock Available</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <a href="{{ route('inventory.detail', ['id' => $item->id]) }}" class="btn btn-info btn-sm">
                                             <i class="fa fa-eye"></i>

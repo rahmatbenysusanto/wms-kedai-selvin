@@ -58,8 +58,8 @@
                                     <th>SKU</th>
                                     <th>Name</th>
                                     <th>Category</th>
-                                    <th>Min Stock</th>
-                                    <th>Satuan</th>
+                                    <th class="text-center">Min Stock</th>
+                                    <th class="text-center">Satuan</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -70,8 +70,8 @@
                                     <td>{{ $item->sku }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->category->name }}</td>
-                                    <td>{{ $item->min_stock }}</td>
-                                    <td>{{ $item->satuan }}</td>
+                                    <td class="text-center"><b>{{ $item->min_stock }}</b> {{ $item->konversi->satuan }}</td>
+                                    <td class="text-center">{{ $item->konversi->satuan }}</td>
                                     <td>
                                         <div class="d-flex gap-2">
                                             <a class="btn btn-secondary btn-sm" onclick="editMaterial('{{ $item->id }}')">
@@ -123,7 +123,12 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Satuan</label>
-                                    <input type="text" class="form-control" name="satuan">
+                                    <select class="form-control" name="satuan">
+                                        <option value="">-- Choose Satuan --</option>
+                                        @foreach($konversi as $item)
+                                            <option value="{{ $item->id }}">{{ $item->satuan }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-6">

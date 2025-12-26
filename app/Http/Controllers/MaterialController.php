@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\KonversiQty;
 use App\Models\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -12,12 +13,12 @@ class MaterialController extends Controller
 {
     public function index(): View
     {
-        $material = Material::with('category')->where('warehouse_id', 1)->whereNull('deleted_at')->paginate(10);
-
+        $material = Material::with('category', 'konversi')->where('warehouse_id', 1)->whereNull('deleted_at')->paginate(10);
+        $konversi = KonversiQty::all();
         $category = Category::all();
 
         $title = 'Material';
-        return view('material.index', compact('title', 'material', 'category'));
+        return view('material.index', compact('title', 'material', 'category', 'konversi'));
     }
 
     public function store(Request $request): \Illuminate\Http\RedirectResponse
@@ -37,6 +38,8 @@ class MaterialController extends Controller
     public function find(Request $request): \Illuminate\Http\JsonResponse
     {
         $material = Material::with('category')->where('id', $request->get('id'))->first();
+        $findSatuanKey = KonversiQty::find($material->satuan);
+        $material->konversi = KonversiQty::where('konversi_key', $findSatuanKey->konversi_key)->get();
 
         return response()->json([
             'success' => true,

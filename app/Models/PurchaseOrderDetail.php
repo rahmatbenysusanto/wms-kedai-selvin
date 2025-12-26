@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PurchaseOrderDetail extends Model
 {
@@ -11,7 +12,11 @@ class PurchaseOrderDetail extends Model
         'purchase_order_id',
         'material_id',
         'qty',
+        'satuan_id',
+        'reff_qty',
+        'reff_satuan_id',
         'price',
+        'price_satuan_id',
         'total'
     ];
 
@@ -23,5 +28,15 @@ class PurchaseOrderDetail extends Model
     public function purchaseOrder(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class, 'purchase_order_id');
+    }
+
+    public function konversiQty(): BelongsTo
+    {
+        return $this->belongsTo(KonversiQty::class, 'satuan_id', 'id');
+    }
+
+    public function reffKonversiQty(): BelongsTo
+    {
+        return $this->belongsTo(KonversiQty::class, 'reff_satuan_id', 'id');
     }
 }

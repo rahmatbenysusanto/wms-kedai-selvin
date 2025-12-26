@@ -53,6 +53,7 @@
                                     <th>Material</th>
                                     <th>Category</th>
                                     <th class="text-center">QTY</th>
+                                    <th class="text-center">Reff QTY</th>
                                     <th>Price</th>
                                 </tr>
                             </thead>
@@ -63,7 +64,8 @@
                                     <td>{{ $item->material->sku }}</td>
                                     <td>{{ $item->material->name }}</td>
                                     <td>{{ $item->material->category->name }}</td>
-                                    <td class="text-center fw-bold">{{ $item->qty }}</td>
+                                    <td class="text-center fw-bold">{{ $item->qty }} {{ $item->konversiQty->satuan }}</td>
+                                    <td class="text-center fw-bold">{{ $item->reff_qty }} {{ $item->reffKonversiQty->satuan }}</td>
                                     <td class="fw-bold">Rp {{ number_format($item->price) }}</td>
                                 </tr>
                             @endforeach
