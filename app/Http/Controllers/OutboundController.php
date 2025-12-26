@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inventory;
+use App\Models\KonversiQty;
 use App\Models\Material;
 use App\Models\Outbound;
 use App\Models\OutboundDetail;
@@ -57,7 +58,7 @@ class OutboundController extends Controller
 
         // Trigger ke POS
         Http::baseUrl(env('URL_POS'))
-            ->post('/process-po', [
+            ->post('/api/approved/purchase-order', [
                 'po_number' => $outbound->outlet_po_number,
             ]);
 
@@ -66,13 +67,21 @@ class OutboundController extends Controller
         ]);
     }
 
+    /**
+     * @throws ConnectionException
+     */
     public function cancel(Request $request): \Illuminate\Http\JsonResponse
     {
         Outbound::where('id', $request->query('id'))->update([
             'status' => 'Cancel'
         ]);
+        $outbound = Outbound::find($request->query('id'));
 
         // Trigger ke POS
+        Http::baseUrl(env('URL_POS'))
+            ->post('/api/cancelled/purchase-order', [
+                'po_number' => $outbound->outlet_po_number,
+            ]);
 
         return response()->json([
             'status' => true
@@ -95,10 +104,18 @@ class OutboundController extends Controller
             foreach ($request->post('material') as $material) {
                 $materialWMS = Material::where('sku', $material['sku'])->first();
 
+                $checkSatuan = KonversiQty::where('satuan', $material['satuan'])->first();
+                if ($checkSatuan->terkecil == 'Y') {
+                    $qty = $material['qty'];
+                } else {
+                    $findKonversiTerkecil = KonversiQty::where('konversi_key', $checkSatuan->konversi_key)->where('terkecil', 'Y')->first();
+                    $qty = $findKonversiTerkecil->konversi * $material['qty'];
+                }
+
                 OutboundDetail::create([
                     'outbound_id'   => $outbound->id,
                     'material_id'   => $materialWMS->id,
-                    'qty'           => $material['qty'],
+                    'qty'           => $qty,
                     'satuan'        => $material['satuan'],
                 ]);
             }
